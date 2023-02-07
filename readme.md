@@ -6,7 +6,8 @@ A CLI for searching through award space - ✨ powered by https://seats.aero ✨.
 ## Install
 
 ```bash
-$ npm install --global award-space-cli
+$ git clone git@github.com:pink/award-space-cli.git
+$ npm install --global
 ```
 
 
