@@ -13,12 +13,14 @@ interface FlightTableProps {
 type FlightTableSchema = {
   Date: string;
   Airlines: string;
+  Origin: string;
+  Dest: string;
   '# of Seats in Business': string;
   '# of Seats in First': string;
 };
 
 const FlightTable = (props: FlightTableProps) => {
-  const [flightData, setFlightData] = useState<FlightTableSchema[]>([]);
+  const [flightData, setFlightData] = useState<FlightTableSchema[] | undefined>();
 
   useEffect(() => {
     const loadFlightData = async () => {
@@ -32,6 +34,8 @@ const FlightTable = (props: FlightTableProps) => {
         return {
           Date: d.Date,
           Airlines: d.JAirlines,
+          Origin: d.Route.OriginAirport,
+          Dest: d.Route.DestinationAirport,
           '# of Seats in Business': String(d.JRemainingSeats),
           '# of Seats in First': String(d.FRemainingSeats),
         };
@@ -53,7 +57,11 @@ const FlightTable = (props: FlightTableProps) => {
 
   return (
     <Box>
-      {!flightData.length ? loadingDataComponent : <Table data={flightData} />}
+      {
+        !flightData ?
+          loadingDataComponent :
+          (flightData.length > 0 ? <Table data={flightData} /> : <Text>{"\n"}No routes found 😭.</Text>)
+      }
     </Box>
   );
 };

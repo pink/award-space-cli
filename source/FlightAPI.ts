@@ -49,6 +49,11 @@ interface FlightAvailability {
   APITermsOfUse: string;
 }
 
+const SHORT_CODE_MAP: Record<string, string[]> = {
+  "NYC": ["EWR", "JFK", "LGA"],
+  "TYO": ["HND", "NRT"],
+}
+
 const AERO_API = 'https://seats.aero/api/availability';
 
 export async function loadFlightAvailability(
@@ -72,16 +77,26 @@ export async function findOpenSeats(
     flightData = await loadFlightAvailability('united');
   }
 
-  return flightData
-    .filter(flight => {
-      return (
-        flight.Route.OriginAirport === origin &&
-        flight.Route.DestinationAirport === destination &&
-        Math.max(flight.JRemainingSeats, flight.FRemainingSeats) >= numSeats &&
-        (flight.JAvailable || flight.FAvailable)
-      );
-    })
-    .sort((a, b) => a.Date.localeCompare(b.Date));
+  const originAirports = (!SHORT_CODE_MAP[origin]) ? [origin] : SHORT_CODE_MAP[origin]
+  const destinationAirports = (!SHORT_CODE_MAP[destination]) ? [destination] : SHORT_CODE_MAP[destination]
+  let result: FlightAvailability[] = []
+
+  for (const o of originAirports) {
+    for (const d of destinationAirports) {
+      result = result.concat(flightData.filter(flight => {
+          return (
+            flight.Route.OriginAirport.toUpperCase() === o.toUpperCase() &&
+            flight.Route.DestinationAirport.toUpperCase() === d.toUpperCase() &&
+            Math.max(flight.JRemainingSeats, flight.FRemainingSeats) >= numSeats &&
+            (flight.JAvailable || flight.FAvailable)
+          );
+        })
+      )
+    }
+  }
+
+  return result
+    .sort((a, b) => a.Date.localeCompare(b.Date) || a.Route.OriginAirport.localeCompare(b.Route.OriginAirport));
 }
 
 export function formatFlightData(
