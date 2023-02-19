@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Box, Text} from 'ink';
+import React, { useState } from 'react';
+import { Box, Text } from 'ink';
 import TextInput from 'ink-text-input';
 import FlightTable from './FlightTable';
 
@@ -7,6 +7,7 @@ interface CLIProps {
   origin?: string;
   destination?: string;
   numSeats?: number;
+  searchRT: boolean;
 }
 
 const App = (props: CLIProps) => {
@@ -14,10 +15,11 @@ const App = (props: CLIProps) => {
   const [originInput, setOriginInput] = useState(props.origin || '');
   const [destination, setDestination] = useState(props.destination || '');
   const [destinationInput, setDestinationInput] = useState(
-    props.destination || ''
+    props.destination || '',
   );
   const [numSeats, setNumSeats] = useState(props.numSeats || 0);
   const [numSeatsInput, setNumSeatsInput] = useState(props.numSeats || 0);
+  const [searchRT, _] = useState(props.searchRT);
 
   const getOriginInput = (isFocused: boolean) => {
     return (
@@ -60,7 +62,7 @@ const App = (props: CLIProps) => {
 
         <TextInput
           value={String(numSeats)}
-          onChange={val => setNumSeats(Number.parseInt(val))}
+          onChange={(val) => setNumSeats(Number.parseInt(val))}
           onSubmit={() => setNumSeatsInput(numSeats)}
           focus={isFocused}
         />
@@ -73,7 +75,7 @@ const App = (props: CLIProps) => {
       {getOriginInput(!originInput.length)}
       {getDestinationInput(!destinationInput.length && originInput.length > 0)}
       {getNumSeatsInput(
-        !numSeatsInput && destinationInput.length > 0 && originInput.length > 0
+        !numSeatsInput && destinationInput.length > 0 && originInput.length > 0,
       )}
       <br />
       {numSeatsInput &&
@@ -83,6 +85,7 @@ const App = (props: CLIProps) => {
           origin={originInput}
           destination={destinationInput}
           numSeats={numSeatsInput}
+          searchRT={searchRT}
         />
       ) : null}
     </Box>

@@ -1,7 +1,6 @@
-# award-space-cli  🛫
+# award-space-cli 🛫
 
 A CLI for searching through award space - ✨ powered by https://seats.aero ✨.
-
 
 ## Install
 
@@ -9,7 +8,6 @@ A CLI for searching through award space - ✨ powered by https://seats.aero ✨.
 $ git clone git@github.com:pink/award-space-cli.git
 $ npm install --global
 ```
-
 
 ## CLI
 
@@ -26,7 +24,7 @@ $ award-space-cli --help
 
   Examples
     $ award-space-cli --origin=JFK --destination=HND --numSeats=2
-    
+
     What's your starting airport (e.g. JFK)?: JFK
     What's your destination airport (e.g. LAX)?: HND
     How many seats do you need (e.g. 4)?: 2
