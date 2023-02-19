@@ -13,10 +13,10 @@ const cli = meow(
     --origin  Starting airport (e.g. JFK)
     --destination  Destination airport (e.g. HND)
     --numSeats  Number of seats to search for
+    --rt Look for flights roundtrip
 
   Examples
     $ award-space-cli --origin=JFK --destination=HND --numSeats=2
-    Hello, Jane
 `,
   {
     flags: {
@@ -29,6 +29,9 @@ const cli = meow(
       numSeats: {
         type: 'number',
       },
+      rt: {
+        type: 'boolean',
+      },
     },
   }
 );
@@ -38,5 +41,6 @@ render(
     origin={cli.flags.origin}
     destination={cli.flags.destination}
     numSeats={cli.flags.numSeats}
+    searchRT={cli.flags.rt}
   />
 );

@@ -7,6 +7,7 @@ interface CLIProps {
   origin?: string;
   destination?: string;
   numSeats?: number;
+  searchRT: boolean;
 }
 
 const App = (props: CLIProps) => {
@@ -18,6 +19,7 @@ const App = (props: CLIProps) => {
   );
   const [numSeats, setNumSeats] = useState(props.numSeats || 0);
   const [numSeatsInput, setNumSeatsInput] = useState(props.numSeats || 0);
+  const [searchRT, _] = useState(props.searchRT);
 
   const getOriginInput = (isFocused: boolean) => {
     return (
@@ -83,6 +85,7 @@ const App = (props: CLIProps) => {
           origin={originInput}
           destination={destinationInput}
           numSeats={numSeatsInput}
+          searchRT={searchRT}
         />
       ) : null}
     </Box>
