@@ -50,14 +50,14 @@ interface FlightAvailability {
 }
 
 const SHORT_CODE_MAP: Record<string, string[]> = {
-  "NYC": ["EWR", "JFK", "LGA"],
-  "TYO": ["HND", "NRT"],
-}
+  NYC: ['EWR', 'JFK', 'LGA'],
+  TYO: ['HND', 'NRT'],
+};
 
 const AERO_API = 'https://seats.aero/api/availability';
 
 export async function loadFlightAvailability(
-  source: string
+  source: string,
 ): Promise<FlightAvailability[]> {
   const response = await axios.get(AERO_API + `?source=${source}`);
   if (!response) {
@@ -71,44 +71,53 @@ export async function findOpenSeats(
   origin: string,
   destination: string,
   numSeats: number = 1,
-  flightData?: FlightAvailability[]
+  flightData?: FlightAvailability[],
 ): Promise<FlightAvailability[]> {
   if (!flightData) {
     flightData = await loadFlightAvailability('united');
   }
 
-  const originAirports = (!SHORT_CODE_MAP[origin]) ? [origin] : SHORT_CODE_MAP[origin]
-  const destinationAirports = (!SHORT_CODE_MAP[destination]) ? [destination] : SHORT_CODE_MAP[destination]
-  let result: FlightAvailability[] = []
+  const originAirports = !SHORT_CODE_MAP[origin]
+    ? [origin]
+    : SHORT_CODE_MAP[origin];
+  const destinationAirports = !SHORT_CODE_MAP[destination]
+    ? [destination]
+    : SHORT_CODE_MAP[destination];
+  let result: FlightAvailability[] = [];
 
   for (const o of originAirports) {
     for (const d of destinationAirports) {
-      result = result.concat(flightData.filter(flight => {
+      result = result.concat(
+        flightData.filter((flight) => {
           return (
             flight.Route.OriginAirport.toUpperCase() === o.toUpperCase() &&
             flight.Route.DestinationAirport.toUpperCase() === d.toUpperCase() &&
-            Math.max(flight.JRemainingSeats, flight.FRemainingSeats) >= numSeats &&
+            Math.max(flight.JRemainingSeats, flight.FRemainingSeats) >=
+              numSeats &&
             (flight.JAvailable || flight.FAvailable)
           );
-        })
-      )
+        }),
+      );
     }
   }
 
-  return result
-    .sort((a, b) => a.Date.localeCompare(b.Date) || a.Route.OriginAirport.localeCompare(b.Route.OriginAirport));
+  return result.sort(
+    (a, b) =>
+      a.Date.localeCompare(b.Date) ||
+      a.Route.OriginAirport.localeCompare(b.Route.OriginAirport),
+  );
 }
 
 export function formatFlightData(
   origin: string,
   destination: string,
-  flightData: FlightAvailability[]
+  flightData: FlightAvailability[],
 ): void {
   console.log(
-    `\nCurrent Flight Availability between ${origin} and ${destination}\n\n`
+    `\nCurrent Flight Availability between ${origin} and ${destination}\n\n`,
   );
 
-  flightData.forEach(flight => {
+  flightData.forEach((flight) => {
     console.log(`* Date: ${new Date(flight.Date).toLocaleDateString('en-US')}`);
     console.log(`Airline: ${flight.JAirlines}`);
 
@@ -134,7 +143,7 @@ async function main() {
     destination,
     origin,
     1,
-    flightData
+    flightData,
   );
   formatFlightData(origin, destination, openSeats);
   formatFlightData(destination, origin, openSeatsReturn);

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import React from 'react';
-import {render} from 'ink';
+import { render } from 'ink';
 import meow from 'meow';
 import App from './ui';
 
@@ -33,7 +33,7 @@ const cli = meow(
         type: 'boolean',
       },
     },
-  }
+  },
 );
 
 render(
@@ -42,5 +42,5 @@ render(
     destination={cli.flags.destination}
     numSeats={cli.flags.numSeats}
     searchRT={cli.flags.rt}
-  />
+  />,
 );

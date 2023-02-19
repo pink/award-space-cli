@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from 'ink-table';
 import Spinner from 'ink-spinner';
-import {findOpenSeats} from './FlightAPI';
-import {Box, Text} from 'ink';
+import { findOpenSeats } from './FlightAPI';
+import { Box, Text } from 'ink';
 
 interface FlightTableProps {
   origin: string;
@@ -21,20 +21,19 @@ type FlightTableSchema = {
 };
 
 const FlightTable = (props: FlightTableProps) => {
-  const [flightDataDeparture, setFlightDataDeparture] = useState<FlightTableSchema[] | undefined>();
-  const [flightDataReturn, setFlightDataReturn] = useState<FlightTableSchema[]>([]);
-  
+  const [flightDataDeparture, setFlightDataDeparture] = useState<
+    FlightTableSchema[] | undefined
+  >();
+  const [flightDataReturn, setFlightDataReturn] = useState<FlightTableSchema[]>(
+    [],
+  );
 
   useEffect(() => {
     const loadFlightData = async () => {
       const fetchFlights = async (origin, dest) => {
-        const data = await findOpenSeats(
-          origin,
-          dest,
-          props.numSeats
-        );
+        const data = await findOpenSeats(origin, dest, props.numSeats);
 
-        return data.map(d => {
+        return data.map((d) => {
           return {
             Date: d.Date,
             Airlines: d.JAirlines,
@@ -44,11 +43,17 @@ const FlightTable = (props: FlightTableProps) => {
             '# of Seats in First': String(d.FRemainingSeats),
           };
         });
-      }
-      const departingFlights = await fetchFlights(props.origin, props.destination)
-      
+      };
+      const departingFlights = await fetchFlights(
+        props.origin,
+        props.destination,
+      );
+
       if (props.searchRT) {
-        const returnFlights = await fetchFlights(props.destination, props.origin);
+        const returnFlights = await fetchFlights(
+          props.destination,
+          props.origin,
+        );
         setFlightDataReturn(returnFlights);
       }
 
@@ -69,33 +74,41 @@ const FlightTable = (props: FlightTableProps) => {
 
   const flightResultComponent = () => {
     const departingFlights = (
-      <Box flexDirection='column'>
-        <Text bold={true} inverse={true}>{"\n"}🛫 Departing Flights:{"\n"}</Text>
-        {flightDataDeparture.length > 0 ? <Table data={flightDataDeparture} /> : <Text>{"\n"}No routes found 😭.</Text>}
+      <Box flexDirection="column">
+        <Text bold={true} inverse={true}>
+          {'\n'}🛫 Departing Flights:{'\n'}
+        </Text>
+        {flightDataDeparture.length > 0 ? (
+          <Table data={flightDataDeparture} />
+        ) : (
+          <Text>{'\n'}No routes found 😭.</Text>
+        )}
       </Box>
-    )
+    );
     const returnFlights = (
-      <Box flexDirection='column'>
-        <Text bold={true} inverse={true}>{"\n"}🛬 Returning Flights:{"\n"}</Text>
-        {flightDataReturn.length > 0 ? <Table data={flightDataReturn} /> : <Text>{"\n"}No routes found 😭.</Text>}
+      <Box flexDirection="column">
+        <Text bold={true} inverse={true}>
+          {'\n'}🛬 Returning Flights:{'\n'}
+        </Text>
+        {flightDataReturn.length > 0 ? (
+          <Table data={flightDataReturn} />
+        ) : (
+          <Text>{'\n'}No routes found 😭.</Text>
+        )}
       </Box>
-    )
+    );
 
     return (
-      <Box flexDirection='column'>
+      <Box flexDirection="column">
         {departingFlights}
         {props.searchRT ? returnFlights : null}
       </Box>
     );
-  }
+  };
 
   return (
     <Box>
-      {
-        !flightDataDeparture ?
-          loadingDataComponent :
-          flightResultComponent()
-      }
+      {!flightDataDeparture ? loadingDataComponent : flightResultComponent()}
     </Box>
   );
 };
