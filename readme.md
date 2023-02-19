@@ -21,6 +21,7 @@ $ award-space-cli --help
     --origin  Starting airport (e.g. JFK)
     --destination  Destination airport (e.g. HND)
     --numSeats  Number of seats to search for
+		--rt Look for flights roundtrip
 
   Examples
     $ award-space-cli --origin=JFK --destination=HND --numSeats=2
