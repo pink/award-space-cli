@@ -1,5 +1,5 @@
 {
-  "name": "award-space-cli",
+  "name": "award-space-cli1",
   "version": "0.0.0",
   "license": "MIT",
   "bin": "dist/cli.js",
