@@ -2,6 +2,8 @@
 
 A CLI for searching through award space - ✨ powered by https://seats.aero ✨.
 
+Test
+
 ## Install
 
 ```bash
