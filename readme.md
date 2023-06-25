@@ -1,6 +1,8 @@
 # award-space-cli 🛫
 
-A CLI for searching through award space - ✨ powered by https://seats.aero ✨.
+A CLI for searching through award space - ✨ powered by https://seats.aero ✨. t
+
+Test
 
 ## Install
 
